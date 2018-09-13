@@ -1,0 +1,2 @@
+# btcpayscript
+script fot btcpay
