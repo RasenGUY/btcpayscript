@@ -26,7 +26,6 @@ function install_dock_lib(){
 function update_btcpay_settings(){
 	ssh_IP=$1
 	email=$2
-	echo "updating settings of btc-pay server"
 	export NBITCOIN_NETWORK="mainnet"
 	export BTCPAYGEN_CRYPTO1="btc"
 	export BTCPAYGEN_LIGHTNING="lnd"
@@ -54,9 +53,9 @@ function btcpay_install(){
 "$@"
 
 #run btcpay_server
-function run_btcpay{
-	cpu=$1
-	docker update btcpayserver_bitcoind --cpus "$cpu"
+function run_btcpay(){
+	computing_power=$1
+	docker update btcpayserver_bitcoind --cpus "$computing_power"
 }
 "$@"
 
