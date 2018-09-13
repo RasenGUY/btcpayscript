@@ -1,0 +1,67 @@
+#! /bin/bash
+
+# script for installing BTCPay server 
+
+#connect to SSH
+function connect_ssh (){
+	ssh_IP=$1
+	ssh root@$ssh_IP
+}
+"$@"
+
+#Download btcpay install files
+function dlaod_BTCpay_install(){
+	git clone https://github.com/btcpayserver/btcpayserver-docker
+}
+"$@"
+
+# install docker-library
+function install_dock_lib(){
+	apt-get update
+	apt-get install libltdl7
+}
+"$@"
+
+#update settings of btc-pay server
+function update_btcpay_settings(){
+	ssh_IP=$1
+	email=$2
+	echo "updating settings of btc-pay server"
+	export NBITCOIN_NETWORK="mainnet"
+	export BTCPAYGEN_CRYPTO1="btc"
+	export BTCPAYGEN_LIGHTNING="lnd"
+	export ACME_CA_URI="https://acme-staging.api.letsencrypt.org/directory"
+	ssh-keygen -t rsa -f /root/.ssh/id_rsa_btcpay -q -P ""
+	echo "# Key used by BTCPay Server" >> /root/.ssh/authorized_keys
+	cat /root/.ssh/id_rsa_btcpay.pub >> /root/.ssh/authorized_keys
+	export BTCPAY_HOST_SSHKEYFILE=/root/.ssh/id_rsa_btcpay
+	export BTCPAY_HOST="$ssh_IP"
+	export LETSENCRYPT_EMAIL="$email"
+}
+"$@"
+
+# install docker 
+function dockerce_install(){
+	wget 'https://download.docker.com/linux/debian/dists/jessie/pool/stable/amd64/docker-ce_18.06.1~ce~3-0~debian_amd64.deb'
+	dpkg -i docker-ce_18.06.1~ce~3-0~debian_amd64.deb
+}
+"$@"
+
+# install btcpay server 
+function btcpay_install(){
+	. ./btcpay-setup.sh -i
+}
+"$@"
+
+#run btcpay_server
+function run_btcpay{
+	cpu=$1
+	docker update btcpayserver_bitcoind --cpus "$cpu"
+}
+"$@"
+
+
+
+
+
+
