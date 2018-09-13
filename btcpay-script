@@ -10,7 +10,7 @@ function connect_ssh (){
 "$@"
 
 #Download btcpay install files
-function dlaod_BTCpay_install(){
+function dload_BTCpay_install(){
 	git clone https://github.com/btcpayserver/btcpayserver-docker
 }
 "$@"
